@@ -14,6 +14,10 @@ Ruby is most often used for creating web applications. But because it’s a gene
 
 - When it comes to web development, the framework Ruby on Rails is used. Rails uses ready-made conventions that save developers time on configuring projects. It also has code generators to create parts of an application automatically, letting programmers write less code.
 
+## Ruby on Rails Introduction
+* **Ruby is a dynamic, reflective, object-oriented, general-purpose programming language.**
+* **Rails is a popular framework used by Ruby Developers.**
+
 ## `Table of Contents`
 * [Ruby Development](#ruby-development)
   * [Abstraction](#abstraction)
