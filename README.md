@@ -3,6 +3,16 @@
 > Welcome to the world of Ruby Development. 
 An ongoing curated list of frameworks, books, articles, talks, screencasts, recordings, libraries, learning tutorials and resources about Ruby Development.
 
+## What is Ruby?
+
+
+## What Is Ruby Used For?
+Ruby is most often used for creating web applications. But because it’s a general-purpose language, it can be used for many other types of programs as well.
+
+- Ruby has been used in the booking site Airbnb, the streaming service Hulu, and the calorie-tracking app MyFitness Pal. This fact alone demonstrates just how versatile and powerful Ruby can be.
+
+- When it comes to web development, the framework Ruby on Rails is used. Rails uses ready-made conventions that save developers time on configuring projects. It also has code generators to create parts of an application automatically, letting programmers write less code.
+
 ## `Table of Contents`
 * [Ruby Development](#ruby-development)
   * [Abstraction](#abstraction)
