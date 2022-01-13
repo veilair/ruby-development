@@ -1,7 +1,7 @@
 # Ruby Development
 
 
-* [Awesome Ruby](#awesome-ruby)
+* [Ruby Development](#ruby-development)
   * [Abstraction](#abstraction)
   * [Admin Interface](#admin-interface)
   * [Analytics](#analytics)
