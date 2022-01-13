@@ -3,7 +3,7 @@
 > Welcome to the world of Ruby Development. 
 An ongoing curated list of frameworks, books, articles, talks, screencasts, recordings, libraries, learning tutorials and resources about Ruby Development.
 
-## What is Ruby?
+##  `What is Ruby? `
 [Ruby](https://developer.oracle.com/ruby/what-is-ruby/) is a highly flexible programming language. Developers coding in Ruby can make changes to the way the language itself works. It’s an interpreted language like Python, rather than a compiled one like C or C++.
 
 ![ruby](https://github.com/veilair/ruby-development/blob/main/img/ror.png)
@@ -15,12 +15,13 @@ Ruby is most often used for creating web applications. But because it’s a gene
 
 - When it comes to web development, the framework Ruby on Rails is used. Rails uses ready-made conventions that save developers time on configuring projects. It also has code generators to create parts of an application automatically, letting programmers write less code.
 
-## Ruby on Rails Introduction
+##  `Ruby on Rails Introduction `
 * **Ruby is a dynamic, reflective, object-oriented, general-purpose programming language.**
 * **Rails is a popular framework used by Ruby Developers.**
 
 ## `Table of Contents`
 * [Ruby Development](#ruby-development)
+  * [Introduction](#what-is-ruby)
   * [Abstraction](#abstraction)
   * [Admin Interface](#admin-interface)
   * [Analytics](#analytics)
