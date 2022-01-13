@@ -4,6 +4,7 @@
 An ongoing curated list of frameworks, books, articles, talks, screencasts, recordings, libraries, learning tutorials and resources about Ruby Development.
 
 ## What is Ruby?
+[Ruby](https://developer.oracle.com/ruby/what-is-ruby/) is a highly flexible programming language. Developers coding in Ruby can make changes to the way the language itself works. It’s an interpreted language like Python, rather than a compiled one like C or C++.
 
 
 ## What Is Ruby Used For?
