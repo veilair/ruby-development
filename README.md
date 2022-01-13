@@ -1,8 +1,9 @@
 # Ruby Development
 
+> Welcome to the world of Ruby Development. 
+An ongoing curated list of frameworks, books, articles, talks, screencasts, recordings, libraries, learning tutorials and resources about Ruby Development.
 
-
-## Table of Contents
+## `Table of Contents`
 * [Ruby Development](#ruby-development)
   * [Abstraction](#abstraction)
   * [Admin Interface](#admin-interface)
