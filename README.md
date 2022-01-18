@@ -1,7 +1,7 @@
 # Ruby Development
 
 > Welcome to the world of Ruby Development. 
-An ongoing curated list of frameworks, books, articles, talks, screencasts, recordings, libraries, learning tutorials and resources about Ruby Development.
+An ongoing curated list of frameworks, books, articles, talks, screencasts, recordings, libraries, learning tutorials and resources about Ruby Development. Thanks to all contributors, you're awesome and wouldn't be possible without you! Our goal is to build a categorized community-driven collection of very well-known resources.
 
 ##  `What is Ruby? `
 [Ruby](https://developer.oracle.com/ruby/what-is-ruby/) is a highly flexible programming language. Developers coding in Ruby can make changes to the way the language itself works. It’s an interpreted language like Python, rather than a compiled one like C or C++.
