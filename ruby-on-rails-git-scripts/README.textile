@@ -1,0 +1,51 @@
+These are a collection of scripts to make it easier to work with Git-based Ruby
+on Rails projects.
+
+h1. Installing
+
+To install, create symlinks of each of these executables in a bin folder, such
+as @/usr/local/bin@:
+
+<pre><code>
+ln -s /path/to/rails-git-scripts/git-* /usr/local/bin/
+</code></pre>
+
+Each tool can then be run as if it were a normal git command.
+
+h1. Commands
+
+h2. git checkout-migrate
+
+*Usage:* @git checkout-migrate <branch>@
+
+This task checks out a branch, and migrates the database appropriately for that
+branch. In order, it performs the following tasks:
+
+# Migrates down any migrations unique to the current branch,
+# checks out the new branch, and
+# migrates up any migrations unique to the new branch.
+
+h2. git remote-branch
+
+*Usage:* @git remote-branch (create|destroy) [<branch>]@
+
+Creates or destroys remote branches and their associated local tracking
+branches. This code is based on git-remote-branch by Carl Mercier
+(carl@carlmercier.com).
+
+h3. Creating Branches
+
+With no arguments (git remote-branch create), adds a new remote branch with the
+commits in the current branch (presumably a local-only branch), and configures
+this branch to track the remote branch.
+
+With a &lt;branch&gt; specified, creates a remote branch, creates a local
+tracking branch, and switches to that branch.
+
+h3. Deleting Branches
+
+With no arguments (git remote-branch delete), removes the current branch both
+locally and remotely.
+
+With a &lt;branch&gt; specified, removes the given branch from the remote
+repository then deletes the local tracking branch.

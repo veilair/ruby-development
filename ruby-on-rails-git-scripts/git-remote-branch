@@ -1,0 +1,152 @@
+#!/usr/bin/env ruby
+#
+# Usage: git remote-branch (create|destroy) [<branch>]
+#
+# Creates or destroys remote branches and their associated local tracking
+# branches. This code is based on git-remote-branch by Carl Mercier
+# (carl@carlmercier.com).
+#
+# Creating Branches
+#
+# With no arguments (git remote-branch create), adds a new remote branch with
+# the commits in the current branch (presumably a local-only branch), and
+# configures this branch to track the remote branch.
+#
+# With a <branch> specified, creates a remote branch, creates a local tracking
+# branch, and switches to that branch.
+#
+# Deleting Branches
+#
+# With no arguments (git remote-branch delete), removes the current branch both
+# locally and remotely.
+#
+# With a <branch> specified, removes the given branch from the remote repository
+# then deletes the local tracking branch.
+
+USAGE = <<-EOF
+Usage: git remote-branch (create|destroy) [<branch>]
+
+Creates or destroys remote branches and their associated local tracking
+branches.
+EOF
+
+CREATING = <<-EOF
+Creating Branches
+
+With no arguments (git remote-branch create), adds a new remote branch with the
+commits in the current branch (presumably a local-only branch), and configures
+this branch to track the remote branch.
+
+With a <branch> specified, creates a remote branch, creates a local tracking
+branch, and switches to that branch.
+EOF
+
+DELETING = <<-EOF
+Deleting Branches
+
+With no arguments (git remote-branch delete), removes the current branch both
+locally and remotely.
+
+With a <branch> specified, removes the given branch from the remote repository
+then deletes the local tracking branch.
+EOF
+
+def git_branch
+  branch_output = `git branch`
+  branch = nil
+  branch_output.each_line do |line|
+    matches = line.match(/^\*\s(.+)$/)
+    if matches then
+      branch = matches[1]
+      break
+    end
+  end
+  return branch
+end
+
+def format(str, attrs={})
+  attrstrs = []
+  attrstrs << case attrs[:style]
+    when :bright then 1
+    when :dim then 2
+    when :underscore then 4
+    when :blink then 5
+    when :reverse then 7
+    when :hidden then 8
+    else nil
+  end
+  
+  attrstrs << case attrs[:color]
+    when :black then 30
+    when :red then 31
+    when :green then 32
+    when :yellow then 33
+    when :blue then 34
+    when :magenta then 35
+    when :cyan then 36
+    when :white then 37
+    else nil
+  end
+  
+  attrstrs << case attrs[:bgcolor]
+    when :black then 40
+    when :red then 41
+    when :green then 42
+    when :yellow then 43
+    when :blue then 44
+    when :magenta then 45
+    when :cyan then 46
+    when :white then 47
+    else nil
+  end
+  "\033[#{attrstrs.compact.join ';'}m#{str}\033[00m"
+end
+
+def run(cmd)
+  puts format(">> #{cmd}", :color => :green)
+  res = `#{cmd}`
+  puts res
+end
+
+command = ARGV.shift
+command = command.chomp.strip if command
+
+if command == '-h' or command.nil? or command.chomp.strip.empty? then
+  puts [ USAGE, CREATING, DELETING ].join("\n")
+  exit
+end
+
+command.downcase!
+
+unless [ 'create', 'destroy' ].include?(command)
+  puts [ USAGE, CREATING, DELETING ].join("\n")
+  exit
+end
+
+current_branch = git_branch
+new_branch = ARGV.shift
+new_branch = new_branch.chomp.strip if new_branch
+new_branch = nil if new_branch and new_branch.empty?
+new_branch ||= current_branch
+
+if new_branch == '-h' then
+  if command == 'create' then
+    puts CREATING
+  elsif command == 'destroy' then
+    puts DELETING
+  end
+  exit
+end
+
+remote = `git remote`.chomp.strip
+
+if command == 'create' then
+  run "git push #{remote} #{current_branch}:refs/heads/#{new_branch}"
+  run "git fetch #{remote}"
+  run "git branch --track #{new_branch} #{remote}/#{new_branch}"
+  run "git checkout #{new_branch}" unless current_branch == new_branch
+elsif command == 'destroy' then
+  run "git push #{remote} :refs/heads/#{new_branch}"
+  run "git checkout master" if current_branch == new_branch
+  run "git branch -d #{new_branch}"
+end

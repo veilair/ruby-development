@@ -1,0 +1,136 @@
+#!/usr/bin/env ruby
+#
+# Usage: git checkout-migrate <branch>
+# 
+# This task checks out a branch, and migrates the database appropriately for
+# that branch. In order, it performs the following tasks:
+# 
+# 1. Migrates down any migrations unique to the current branch,
+# 2. checks out the new branch, and
+# 3. migrates up any migrations unique to the new branch.
+
+suffix = [ '5', '' ].detect do |suff|
+  not `which mysql#{suff}`.chomp.strip.empty?
+end
+unless suffix
+  raise "Couldn't figure out your MySQL binary."
+end
+
+new_branch = ARGV.shift
+if new_branch == '-h' or new_branch.nil? or new_branch.strip.empty? then
+  puts <<-EOF
+Usage: git checkout-migrate <branch>
+
+This task checks out a branch, and migrates the database appropriately for that
+branch. In order, it performs the following tasks:
+
+1. Migrates down any migrations unique to the current branch,
+2. checks out the new branch, and
+3. migrates up any migrations unique to the new branch.
+  EOF
+  exit
+end
+
+def format(str, attrs={})
+  attrstrs = []
+  attrstrs << case attrs[:style]
+    when :bright then 1
+    when :dim then 2
+    when :underscore then 4
+    when :blink then 5
+    when :reverse then 7
+    when :hidden then 8
+    else nil
+  end
+  
+  attrstrs << case attrs[:color]
+    when :black then 30
+    when :red then 31
+    when :green then 32
+    when :yellow then 33
+    when :blue then 34
+    when :magenta then 35
+    when :cyan then 36
+    when :white then 37
+    else nil
+  end
+  
+  attrstrs << case attrs[:bgcolor]
+    when :black then 40
+    when :red then 41
+    when :green then 42
+    when :yellow then 43
+    when :blue then 44
+    when :magenta then 45
+    when :cyan then 46
+    when :white then 47
+    else nil
+  end
+  "\033[#{attrstrs.compact.join ';'}m#{str}\033[00m"
+end
+
+def git_branch
+  branch_output = `git branch`
+  branch = nil
+  branch_output.each_line do |line|
+    matches = line.match(/^\*\s(.+)$/)
+    if matches then
+      branch = matches[1]
+      break
+    end
+  end
+  return branch
+end
+
+old_branch = git_branch
+
+old_migrations = Dir.entries("db/migrate").map { |filename| filename.match(/^(\d+)_/)[1].to_i rescue nil }.compact.sort
+
+################################################################################
+puts format(">> Checking #{new_branch}'s list of migrations...", :color => :green, :style => :bright)
+
+system "git checkout #{new_branch}"
+
+if git_branch != new_branch then
+  puts "Couldn't switch branches; aborting."
+  exit
+end
+
+new_migrations = Dir.entries("db/migrate").map { |filename| filename.match(/^(\d+)_/)[1].to_i rescue nil }.compact.sort
+
+################################################################################
+puts format(">> Migrating down migrations unique to #{old_branch}...", :color => :green, :style => :bright)
+
+system "git checkout #{old_branch}"
+
+shared_migrations = old_migrations & new_migrations
+unique_to_old = old_migrations - shared_migrations
+
+puts format("!! About to remove migrations #{unique_to_old.map { |num| num.to_s }.join(", ")}; would you like to make a backup of your database first? [Y/n]", :color => :yellow)
+backup_answer = gets
+if backup_answer.strip.downcase[0] == ?n then
+  puts "   >> Skipping the backup."
+else
+  puts "   >> Backing up your database to db/backup.#{old_branch}.sql..."
+  system "mysqldump#{suffix} -u root collegelist_development > db/backup.#{old_branch}.sql"
+end
+
+unique_to_old.reverse.each { |num| system "rake db:migrate:down VERSION=#{num}" }
+
+puts format(">> Migrating down migrations unique to #{old_branch} on test...", :color => :green, :style => :bright)
+unique_to_old.reverse.each { |num| system "env RAILS_ENV=test rake db:migrate:down VERSION=#{num}" }
+
+################################################################################
+puts format(">> Checking out #{new_branch}...", :color => :green, :style => :bright)
+
+system "git checkout #{new_branch}"
+
+################################################################################
+puts format(">> Migrating up migrations unique to #{new_branch}...", :color => :green, :style => :bright)
+system "rake db:migrate"
+
+puts format(">> Migrating up migrations unique to #{new_branch} on test...", :color => :green, :style => :bright)
+system "env RAILS_ENV=test rake db:migrate"
+
+################################################################################
+puts format(">> All complete.", :color => :green, :style => :bright)
