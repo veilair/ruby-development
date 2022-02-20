@@ -1,44 +1,76 @@
-# Contributing to Ruby Development
 
-Thanks for taking the time to contribute :+1:
+# Contribution 
 
-The following is a set of guidelines for contributing to Awesome Ruby. These are just guidelines, not rules, use your best judgment and feel free to propose changes to this project.
+This project welcomes contributions from the community.  All contributions to this repository must be
+signed as described on that page. Your signature certifies that you wrote the patch or have the right to pass it on
+as an open-source patch.
 
-## How Can I Contribute?
+## Contribution Flow
 
-### Creating Issues
+This is a rough outline of what a contributor's workflow looks like:
 
-Do you know any cool Ruby project that isn't listed here? It isn't also on the [open issues](https://github.com/markets/ruby-development/issues) or [pull requests](https://github.com/markets/react-native-development/pulls)?
-Please create a new issue or submit a pull request, we will be happy to receive it!
+- Create a topic branch from where you want to base your work
+- Make commits of logical units
+- Make sure your commit messages are in the proper format (see below)
+- Push your changes to a topic branch in your fork of the repository
+- Submit a pull request
 
-### Submitting Pull Requests
+Example:
 
-Feel free to take any open issue, just make sure that you follow the contribution guidelines.
+``` shell
+git remote add upstream https://github.com/veilair/<repos-name>
+git checkout -b my-new-feature master
+git commit -a
+git push origin my-new-feature
+```
 
-### Voting and commenting
+### Staying In Sync With Upstream
 
-Just use GitHub reactions and comments to express your feelings/experience about open suggestions (additions or removals).
+When your branch gets out of sync with the exajobs/master branch, use the following to update:
 
-## Contribution Guidelines
+``` shell
+git checkout my-new-feature
+git fetch -a
+git pull --rebase upstream master
+git push --force-with-lease origin my-new-feature
+```
 
-* Please search previous suggestions before making a new one, as yours may be a duplicate.
-* Use the following format: `[Library](url) - Description.`
-* The link should be the name of the package or project.
-* Links and categories should be sorted alphabetically.
-* Add one link per pull-request.
-* Keep descriptions concise, clear and simple, and end them with a period/stop.
-* Check your spelling and grammar.
-* New categories, or improvements to the existing ones are also welcome.
-* Make sure your text editor is set to remove trailing whitespace.
+### Updating pull requests
 
-## Quality standard
+If your PR fails to pass CI or needs changes based on code review, you'll most likely want to squash these changes into
+existing commits.
 
-To stay on the list, projects should follow these quality standards:
+If your pull request contains a single commit or your changes are related to the most recent commit, you can simply
+amend the commit.
 
-* Generally used (at least 20k downloads) and useful to the community.
-* Actively maintained (even if that just means take care of open issues and/or keep compatibility with current Ruby versions).
-* Stable.
-* Documented.
-* Tests.
+``` shell
+git add .
+git commit --amend
+git push --force-with-lease origin my-new-feature
+```
 
-Thanks to all [contributors](https://github.com/markets/ruby-development/graphs/contributors), you're awesome and wouldn't be possible without you!
+If you need to squash changes into an earlier commit, you can use:
+
+``` shell
+git add .
+git commit --fixup <commit>
+git rebase -i --autosquash master
+git push --force-with-lease origin my-new-feature
+```
+
+Be sure to add a comment to the PR indicating your new changes are ready to review, as GitHub does not generate a
+notification when you git push.
+
+### Code Style
+
+### Formatting Commit Messages
+
+We follow the conventions on [How to Write a Git Commit Message](http://chris.beams.io/posts/git-commit/).
+
+Be sure to include any related GitHub issue references in the commit message.  See
+[GFM syntax](https://guides.github.com/features/mastering-markdown/#GitHub-flavored-markdown) for referencing issues
+and commits.
+
+## Reporting Bugs and Creating Issues
+
+When opening a new issue, try to roughly follow the commit message format conventions above.
